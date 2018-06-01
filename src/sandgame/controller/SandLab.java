@@ -14,6 +14,7 @@ public class SandLab
   //do not add any more fields below
   private int[][] grid;
   private SandDisplay display;
+  private int temp;
   
   
   /**
@@ -37,6 +38,7 @@ public class SandLab
     
     grid = new int[numRows][numCols];
     display = new SandDisplay("Falling Sand", numRows, numCols, names);
+    temp = 1;
   }
   
   //called when the user clicks on a location using the given tool
@@ -82,7 +84,6 @@ public class SandLab
     //The scalar refers to how big the value could be
     //int someRandom = (int) (Math.random() * scalar)
     //remember that you need to watch for the edges of the array
-    
     int randRow = (int) (Math.random() * (grid.length));
     int randCol = (int) (Math.random() * (grid[0].length));
     int randMove = (int) (Math.random() * 4);
@@ -99,27 +100,43 @@ public class SandLab
     		
     }
     if (grid[randRow][randCol] == WATER) {
+    	if (temp % 2 == 0) {
     		if (randMove == 1) {
-    			if ((randRow + 1 < grid.length) && grid[randRow + 1][randCol] != METAL
-    					&& grid[randRow + 1][randCol] != SAND && grid[randRow + 1][randCol] != WATER) {
-    				grid[randRow][randCol] = EMPTY;
-    				grid[randRow + 1][randCol] = WATER;
+    			if (randRow + 1 < grid.length && randCol + 1 < grid[0].length) {
+	    			if ((randRow + 1 < grid.length) && grid[randRow + 1][randCol] != METAL
+	    					&& grid[randRow + 1][randCol] != SAND && grid[randRow + 1][randCol] != WATER) {
+	    				grid[randRow][randCol] = EMPTY;
+	    				grid[randRow + 1][randCol] = WATER;
+	    			}
     			}
     		}
     		if (randMove == 2) {
-    			if ((randCol + 1 < grid[0].length) && grid[randRow][randCol + 1] != METAL
-    					&& grid[randRow + 1][randCol] != SAND && grid[randRow + 1][randCol] != WATER) {
-    				grid[randRow][randCol] = EMPTY;
-    				grid[randRow][randCol + 1] = WATER;
+    			if (randRow + 1 < grid.length && randCol + 1 < grid[0].length) {
+	    			if ((randCol + 1 < grid[0].length) && grid[randRow][randCol + 1] != METAL
+	    					&& grid[randRow + 1][randCol] != SAND && grid[randRow + 1][randCol] != WATER) {
+	    				grid[randRow][randCol] = EMPTY;
+	    				grid[randRow][randCol + 1] = WATER;
+	    			}
     			}
     		}
-    		if (randMove == 3) {
-    			if ((randCol - 1 > grid[0].length) && grid[randRow][randCol - 1] != METAL
-    					&& grid[randRow + 1][randCol] != SAND && grid[randRow + 1][randCol] != WATER) {
-    				grid[randRow][randCol] = EMPTY;
-    				grid[randRow][randCol - 1] = WATER;
-    			}
+			if (randMove == 3) {
+				if (randRow - 1 > grid.length && randCol + 1 < grid[0].length) {
+					if ((randCol - 1 > grid[0].length) && grid[randRow][randCol - 1] != METAL
+						&& grid[randRow + 1][randCol] != SAND && grid[randRow + 1][randCol] != WATER) {
+					grid[randRow][randCol] = EMPTY;
+					grid[randRow][randCol - 1] = WATER;
+					}
+				}
+			}
+    	} else {
+    		if (randRow + 1 < grid.length && randCol + 1 < grid[0].length) {
+			if ((randRow + 1 < grid.length) && grid[randRow + 1][randCol] != METAL
+					&& grid[randRow + 1][randCol] != SAND && grid[randRow + 1][randCol] != WATER) {
+				grid[randRow][randCol] = EMPTY;
+				grid[randRow + 1][randCol] = WATER;
+			}
     		}
+    	}
     }
   }
   
@@ -131,6 +148,7 @@ public class SandLab
       for (int i = 0; i < display.getSpeed(); i++)
       {
         step();
+        temp = temp + 1;
       }
       updateDisplay();
       display.repaint();
